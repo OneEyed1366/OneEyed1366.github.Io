@@ -1,5 +1,9 @@
 @echo off
-
+@REM Добавляем файлы для публикаций в .gitignore
+echo #deploy files>> .gitignore
+echo *.bat>> .gitignore
+echo *.sh>> .gitignore
+@REM Записываем переменные
 echo "Waiting for user input (format -> Name-Number)"
 set /p branchName=
 
@@ -8,14 +12,16 @@ echo "1 -> copy to GitHub"
 echo "2 -> deploy to Surge"
 echo "3 -> Copy and Deploy"
 set /p distance=
-
+@REM По необходимости, генерируем проект
 echo "Run script for creating production state of the project? (y/n)"
 set /p deployAnswer=
 
+set currDate=%date:~6%-%date:~,2%-%date:~3,2%
 set donor=C:\Users\proka\NodeJS\deploy\vue\deploy.bat
 set file=deploy.bat
 set git=https://github.com/OneEyed1366/publicProjects.git
-set distanceURL=%branchName%.surge.sh
+set distanceURL=%currDate%-%branchName%.surge.sh
+echo %distanceURL%
 
 if "%deployAnswer%"=="y" (
   npm run build
@@ -37,13 +43,13 @@ pause
 
 :deploySurge
 cd dist
-surge --domain %branchName%.surge.sh
+surge --domain %distanceURL%
 echo "Deploying to the %branchName%.surge.sh -> Succesful"
 cd ..
 pause
 
 :copy-and-deploy
-echo %branchName%.surge.sh > link.txt
+echo %distanceURL% > link.txt
 goto copyGit
 goto deploySurge
 pause

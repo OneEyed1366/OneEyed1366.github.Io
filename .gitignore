@@ -2,7 +2,6 @@
 node_modules
 /dist
 
-
 # local env files
 .env.local
 .env.*.local
@@ -23,4 +22,6 @@ pnpm-debug.log*
 *.sw?
 deploy.bat
 .gitignore
-deploy.sh
+#deploy files
+*.bat
+*.sh

@@ -9,14 +9,14 @@
           <tr>
             <th>Amount</th>
             <th>Price</th>
-            <th>Total</th>
+            <th v-if="windowWidth">Total</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="bid in bids" :key="bid[0]">
             <td>{{ bid[0] }}</td>
             <td>{{ bid[1] }}</td>
-            <td>{{ bid[2] }}</td>
+            <td v-if="windowWidth">{{ bid[2] }}</td>
           </tr>
         </tbody>
       </table>
@@ -27,14 +27,14 @@
           <tr>
             <th>Amount</th>
             <th>Price</th>
-            <th>Total</th>
+            <th v-if="windowWidth">Total</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="ask in asks" :key="ask[0]">
             <td>{{ ask[0] }}</td>
             <td>{{ ask[1] }}</td>
-            <td>{{ ask[2] }}</td>
+            <td v-if="windowWidth">{{ ask[2] }}</td>
           </tr>
         </tbody>
       </table>
@@ -57,7 +57,7 @@
 @media (max-width: 991px) {
   .get-data__block {
     width: 80%;
-    padding: 0;
+    padding: 2em 0;
   }
 }
 @media (max-width: 496px) {
@@ -71,6 +71,11 @@
 <script>
 export default {
   name: "Home",
+  data () {
+    return {
+      windowWidth: true
+    }
+  },
   computed: {
     bids() {
       return this.$store.state.bids
@@ -89,15 +94,23 @@ export default {
     }
   },
   methods: {
-    getData() {
-      this.$store.dispatch('get')
+    getData(arrayName) {
+      this.$store.dispatch('get', arrayName)
+    },
+    resizeEventHandler() {
+      if (window.innerWidth >= 496) {
+        this.windowWidth = true
+      } else {
+        this.windowWidth = false
+      }
     }
   },
   mounted() {
+    window.addEventListener("resize", this.resizeEventHandler);
     setInterval(() => {
-      this.getData()
+      this.getData('bids')
+      this.getData('asks')
     }, 1000);
-    // this.getData()
   }
 };
 </script>

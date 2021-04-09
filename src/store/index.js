@@ -32,20 +32,14 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    get ({ commit }) {
+    get ({ commit }, arrayName) {
       const url = `https://api.binance.com/api/v3/depth?symbol=${this.state.whatToSearch}&limit=${this.state.howManyToSearch}`
 
       get(url)
-        .then((res) => {
-          for (const arr of res.data.bids) {
+        .then(async (res) => {
+          for (const arr of await res.data[arrayName]) {
             commit('set', {
-              to: 'bids', 
-              content: [arr[0], arr[1], arr[0] * arr[1]]
-            })
-          }
-          for (const arr of res.data.asks) {
-            commit('set', {
-              to: 'asks', 
+              to: arrayName, 
               content: [arr[0], arr[1], arr[0] * arr[1]]
             })
           }

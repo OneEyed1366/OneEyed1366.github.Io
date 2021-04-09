@@ -21,3 +21,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+deploy.bat
+.gitignore
+deploy.sh
